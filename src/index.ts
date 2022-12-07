@@ -1,24 +1,34 @@
 import Fastify, {FastifyInstance} from 'fastify'
 import type {Server, IncomingMessage, ServerResponse} from 'http'
-import {router} from "./router/router";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+import fastifyJwt from "@fastify/jwt";
 import swaggerConfig from './doc/swaggerConfig';
+import {router} from "./router/router";
+import {loginSchema} from "./dataValidation/schema";
 
 const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastify({
     logger: true
 })
 
-// ROUTING
-fastify.register(router)
-
 // DOCUMENTATION
-fastify.register(require('@fastify/swagger'), swaggerConfig)
-fastify.register(require('@fastify/swagger-ui'), {
+fastify.register(fastifySwagger, swaggerConfig)
+fastify.register(fastifySwaggerUi, {
     routePrefix: '/documentation',
     uiConfig: {
         docExpansion: 'full',
         deepLinking: false
     }
 })
+
+fastify.addSchema(loginSchema)
+
+fastify.register(fastifyJwt,  {
+    secret: 'SUPER_SECRET_JWT'
+})
+
+
+fastify.register(router, {prefix: '/api/auth'})
 
 
 // RUNNING SERVER
@@ -32,4 +42,4 @@ const start = async () => {
     }
 }
 
-start()
+start().then()

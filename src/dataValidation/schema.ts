@@ -17,7 +17,6 @@ export const loginBodySchema = {
 export const loginSchema = {
     $id: 'login_auth',
     schema: {
-        required: ['username'],
         tags: ['auth'],
         body: loginBodySchema.body,
         response: {

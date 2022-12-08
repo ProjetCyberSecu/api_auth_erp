@@ -6,6 +6,7 @@ import fastifyJwt from "@fastify/jwt";
 import swaggerConfig from './doc/swaggerConfig';
 import {router} from "./router/router";
 import {loginSchema} from "./dataValidation/schema";
+import fastifyLdap from "./ldap/fastifyLdap";
 
 const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastify({
     logger: true
@@ -26,6 +27,8 @@ fastify.addSchema(loginSchema)
 fastify.register(fastifyJwt,  {
     secret: 'SUPER_SECRET_JWT'
 })
+
+fastify.register(fastifyLdap)
 
 
 fastify.register(router, {prefix: '/api/auth'})

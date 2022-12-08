@@ -7,6 +7,10 @@ import swaggerConfig from './doc/swaggerConfig';
 import {router} from "./router/router";
 import {loginSchema} from "./dataValidation/schema";
 import fastifyLdap from "./ldap/fastifyLdap";
+import * as dotenv from 'dotenv'
+import * as process from "process";
+
+dotenv.config()
 
 const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastify({
     logger: true
@@ -33,11 +37,13 @@ fastify.register(fastifyLdap)
 
 fastify.register(router, {prefix: '/api/auth'})
 
+const port = parseInt((process.env.PORT? process.env.PORT : 8080 ) as string)
+
 
 // RUNNING SERVER
 const start = async () => {
     try {
-        await fastify.listen({ port: 8080 })
+        await fastify.listen({ host: process.env.HOST, port })
         fastify.swagger()
     } catch (e) {
         fastify.log.error(e)

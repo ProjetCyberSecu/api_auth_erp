@@ -9,11 +9,13 @@ import {loginSchema} from "./dataValidation/schema";
 import fastifyLdap from "./ldap/fastifyLdap";
 import * as dotenv from 'dotenv'
 import * as process from "process";
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 
 dotenv.config()
 
 const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastify({
-    logger: true
+    logger: false
 })
 
 // DOCUMENTATION
@@ -31,6 +33,8 @@ fastify.addSchema(loginSchema)
 fastify.register(fastifyJwt,  {
     secret: 'SUPER_SECRET_JWT'
 })
+
+dayjs.extend(advancedFormat)
 
 fastify.register(fastifyLdap)
 

@@ -7,12 +7,12 @@ services:
       - '1389:1389'
       - '1636:1636'
     environment:
+      - LDAP_ROOT=dc=killerbee,dc=com
       - LDAP_ADMIN_USERNAME=admin
-      - LDAP_ADMIN_PASSWORD=password
+      - LDAP_ADMIN_PASSWORD=adminpassword
       - LDAP_USERS=user01,user02
       - LDAP_PASSWORDS=password1,password2
-      - LDAP_BIND_DN=cn=admin,dc=killerbee,dc=fr
-      - LDAP_BIND_PASSWORD=password
+      - LDAP_GROUP=readers
     volumes:
       - 'openldap_data:/bitnami/openldap'
 

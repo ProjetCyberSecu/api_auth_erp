@@ -32,6 +32,31 @@ export const loginSchema = {
     }
 }
 
+export const refreshBodySchema = {
+    body: Type.Object({
+        accessToken: Type.String(),
+        refreshToken: Type.String()
+    })
+}
+
+export const refreshSchema = {
+    $id: 'refresh_aut',
+    schema: {
+        tags: ['auth'],
+        body: refreshBodySchema.body,
+        response: {
+            200: {
+                description: 'Successfully connected',
+                type: 'object',
+                properties: {
+                    accessToken: Type.String(),
+                    refreshToken: Type.String()
+                }
+            }
+        }
+    }
+}
+
 export type FastifyRequestTypebox<TSchema extends FastifySchema> = FastifyRequest<
     RouteGenericInterface,
     RawServerDefault,

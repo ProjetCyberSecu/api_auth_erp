@@ -11,11 +11,16 @@ import * as dotenv from 'dotenv'
 import * as process from "process";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import fastifyCors from "@fastify/cors";
 
 dotenv.config()
 
 const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastify({
     logger: false
+})
+
+fastify.register(fastifyCors, {
+    origin: 'http://localhost:3000'
 })
 
 // DOCUMENTATION

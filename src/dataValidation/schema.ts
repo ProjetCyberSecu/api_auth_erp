@@ -34,9 +34,11 @@ export const loginSchema = {
 
 export const refreshBodySchema = {
     body: Type.Object({
-        accessToken: Type.String(),
-        refreshToken: Type.String()
-    })
+        accessToken: Type.String()
+    }),
+    headers: {
+        authorization: Type.String()
+    }
 }
 
 export const refreshSchema = {
@@ -44,16 +46,18 @@ export const refreshSchema = {
     schema: {
         tags: ['auth'],
         body: refreshBodySchema.body,
+        headers: refreshBodySchema.headers,
         response: {
             200: {
                 description: 'Successfully connected',
                 type: 'object',
                 properties: {
                     accessToken: Type.String(),
-                    refreshToken: Type.String()
+                    refreshToken: Type.String(),
                 }
             }
-        }
+        },
+        description: "This road allows you to refresh yours authentication token. You need to provide an old access token in the body and your refresh token in the `headers` `authorization` as a `Bearer` token"
     }
 }
 

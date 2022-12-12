@@ -18,26 +18,20 @@ const generateTokens = (jwt: JWT, username: string) => {
         "exp": parseInt(dayjs().add(20, 'minute').format('X')),
         "iat": parseInt(dayjs().format('X')),
     }
-
     const JWTRefreshPayload = {
         "iss": "https://killerbee.com/",
         "exp": parseInt(dayjs().add(1, 'day').format('X')),
         "iat": parseInt(dayjs().format('X')),
     }
-
     const accessToken = jwt.sign({...JWTPayload})
     const refreshToken = jwt.sign({...JWTRefreshPayload})
-
     return {accessToken, refreshToken}
 }
 
 export const login = async (req: FastifyRequestTypebox<typeof loginBodySchema>, res: FastifyReply) => {
 
     const {username, password} = req.body
-
-    /**
-     * Try to auth from ldap with username and password
-     */
+    // Try to auth from ldap with username and password
     const result = await req.server.ldap.tempAuth(username, password)
 
     // handle bad credentials
@@ -55,10 +49,14 @@ export const login = async (req: FastifyRequestTypebox<typeof loginBodySchema>, 
 
 export const refresh = async (req: FastifyRequestTypebox<typeof refreshBodySchema>, res: FastifyReply) => {
 
-    const {accessToken, refreshToken} = req.body
+    // Get tokens
+    const {accessToken} = req.body
+    const { authorization } = req.headers
+    if (!authorization) return res.status(401).send({error: 'Unauthorized', message: 'Invalid tokens'})
+    const refreshToken = authorization.replace('Bearer ', '')
 
     try {
-        req.server.jwt.decode(refreshToken)
+        req.server.jwt.verify(refreshToken)
         let accessTokenPayload = req.server.jwt.decode(accessToken) as AccessTokenPayload
 
         if (typeof accessTokenPayload === 'string') {

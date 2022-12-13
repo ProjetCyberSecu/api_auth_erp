@@ -16,6 +16,7 @@ const generateTokens = (jwt: JWT, username: string) => {
         "iss": "https://killerbee.com/",
         "azp": username,
         "exp": parseInt(dayjs().add(20, 'minute').format('X')),
+        "role": 'admin',
         "iat": parseInt(dayjs().format('X')),
     }
     const JWTRefreshPayload = {

@@ -1,6 +1,6 @@
 import {SwaggerOptions} from "@fastify/swagger";
 
-const swagger = {
+const swagger: SwaggerOptions = {
     swagger: {
         info: {
             title: 'My API',
@@ -19,6 +19,10 @@ const swagger = {
             {
                 name: 'users',
                 description: 'User related end-points'
+            },
+            {
+                name: 'auth',
+                description: 'auth requests'
             }
         ],
         securityDefinitions: {

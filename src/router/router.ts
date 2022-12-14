@@ -1,13 +1,11 @@
-import {FastifyInstance} from "fastify";
-import {loginSchema} from "../dataValidation/schema";
+import {FastifyInstance, FastifyPluginAsync} from "fastify";
+import {loginSchema, refreshSchema} from "../dataValidation/schema";
+import {TypeBoxTypeProvider} from "@fastify/type-provider-typebox";
+import {login, refresh} from "../controllers/auth.controller";
 
-export const router = async (fastify: FastifyInstance, option: Object) => {
+export const router: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 
-    fastify.post('/login', loginSchema , async (request, reply) => {
-        return {your: 'logged'}
-    })
-    fastify.get('/', async (request, reply) => {
-        return {'hello': 'world'}
-    })
+    fastify.withTypeProvider<TypeBoxTypeProvider>().post('/login', loginSchema, login)
+    fastify.withTypeProvider<TypeBoxTypeProvider>().post('/refresh', refreshSchema, refresh)
 
 }

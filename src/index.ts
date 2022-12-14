@@ -20,7 +20,7 @@ const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastif
 })
 
 fastify.register(fastifyCors, {
-    origin: 'http://localhost:3000'
+    origin: process.env.CORS || true
 })
 
 // DOCUMENTATION

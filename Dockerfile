@@ -7,9 +7,9 @@ RUN npm install
 COPY . ./
 RUN npm run build
 
+
+
 FROM node:18-alpine AS server
-
-
 WORKDIR /app
 COPY --from=build ./app/dist ./dist
 COPY package*.json ./

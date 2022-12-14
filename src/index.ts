@@ -8,7 +8,6 @@ import {router} from "./router/router";
 import {loginSchema} from "./dataValidation/schema";
 import fastifyLdap from "./ldap/fastifyLdap";
 import * as dotenv from 'dotenv'
-import * as process from "process";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import fastifyCors from "@fastify/cors";
@@ -20,7 +19,7 @@ const fastify: FastifyInstance<Server, IncomingMessage, ServerResponse> = Fastif
 })
 
 fastify.register(fastifyCors, {
-    origin: process.env.CORS || true
+    origin: process.env.CORS?.split(' ') || true
 })
 
 // DOCUMENTATION
@@ -36,7 +35,7 @@ fastify.register(fastifySwaggerUi, {
 fastify.addSchema(loginSchema)
 
 fastify.register(fastifyJwt,  {
-    secret: 'SUPER_SECRET_JWT'
+    secret: process.env.JWT_SECRET_KEY || 'SUPER_SECRET_JWT'
 })
 
 dayjs.extend(advancedFormat)

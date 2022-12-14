@@ -1,21 +1,16 @@
 version: '3'
 
 services:
-  openldap:
-    image: docker.io/bitnami/openldap:2.6
+  web:
+    build: ./
     ports:
-      - '1389:1389'
-      - '1636:1636'
+      - "8080:8080"
     environment:
-      - LDAP_ROOT=dc=killerbee,dc=com
-      - LDAP_ADMIN_USERNAME=admin
-      - LDAP_ADMIN_PASSWORD=adminpassword
-      - LDAP_USERS=user01,user02
-      - LDAP_PASSWORDS=password1,password2
-      - LDAP_GROUP=readers
-    volumes:
-      - 'openldap_data:/bitnami/openldap'
+      - HOST=0.0.0.0
+      - LDAP_HOST=10.0.100.11
+      - PORT=8080
+      - LDAP_USER=Administrator
+      - LDAP_PASSWORD=oMu37Ta54Zwk
+      - LDAP_DN=dc=killer,dc=be
+      - LDAP_DOMAIN=killerbee.com
 
-volumes:
-  openldap_data:
-    driver: local

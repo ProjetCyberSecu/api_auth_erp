@@ -75,6 +75,19 @@ export const refresh = async (req: FastifyRequestTypebox<typeof refreshBodySchem
 
     try {
         req.server.jwt.verify(refreshToken)
+        try {
+            req.server.jwt.verify(accessToken)
+        } catch (e) {
+            const jsonError = JSON.stringify(e)
+            const error = JSON.parse(jsonError as string) as {code: string}
+            if (error.code !== 'FAST_JWT_EXPIRED') {
+                res.status(401).send({
+                    error: 'Unauthorized',
+                    message: 'Invalid access tokens'
+                })
+                return
+            }
+        }
         let accessTokenPayload = req.server.jwt.decode(accessToken) as AccessTokenPayload
 
         if (typeof accessTokenPayload === 'string') {
